@@ -11,12 +11,14 @@
   <link rel="stylesheet" type="text/css" href="css/animation.css" />
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-  <link rel="stylesheet"  href="css/homepage.css" />
+  <link rel="stylesheet" href="css/homepage.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
 </head>
 
 <body style="background-image: url(./image/bg.svg)">
-  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark animate__animated animate__fadeInDown">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">
 
@@ -43,7 +45,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="about.html"><span class="hover-border">About</span></a>
+            <a class="nav-link" href="about.html"><span class="hover-border">About Us</span></a>
           </li>
         </ul>
       </div>
@@ -51,7 +53,7 @@
   </nav>
 
   <div class="home-first-block">
-    <div class="home-info">
+    <div class="home-info animate__animated animate__fadeInLeft">
       <div class="home-question-title">Disk Scheduling Simulator</div>
       <p class="home-question-answer">
         Efficient disk scheduling is crucial for optimizing system performance
@@ -65,7 +67,7 @@
         )
       </div>
     </div>
-    <div class="home-algo-info">
+    <div class="home-algo-info animate__animated animate__fadeInRight">
       <iframe class="osvideo" width="450" height="253"
         src="https://www.youtube.com/embed/videoseries?list=PLRMqyuLDxuZV8LiI0KuoAWwOGJvvcnMse"
         title="YouTube video player" frameborder="0"
@@ -79,7 +81,7 @@
         Disk Scheduling
       </div>
       <div class="home-specififc-algo-info" data-aos="fade-right">
-        <div class="card text-dark bg-light mb-3 home-card">
+        <div class="card text-dark bg-light mb-3 home-card animate__animated animate__zoomIn">
           <div class="card-header home-card-header">Basic Information</div>
           <div class="card-body home-card-body" style="align-items: flex-end">
             <p class="card-text home-card-text">
@@ -107,7 +109,7 @@
     </div>
   </div>
 
-  <div id="foooter">
+  <div id="foooter" class="animate__animated animate__fadeInUp">
     <div class="footer-dark">
       <footer>
         <div id="footer-container" class="footercontainer">
@@ -179,7 +181,7 @@
                 </svg>
               </a>
             </span>
-            
+
           </div>
         </div>
       </footer>
@@ -188,6 +190,8 @@
 
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
   <script src="js/home_animate.js"></script>
   <script type="text/javascript">
     AOS.init({
