@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling</title>
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <a href="#">
+                <div>Disk Scheduling</div>
+            </a>
+            <div>
+                <ul>
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="#">Algorithm</a>
+                        <ul>
+                            <li><a href="#">Disk Scheduling</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Compare</a>
+                    </li>
+                    <li>
+                        <a href="#">About Developers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <div></div>
+        <div>
+            <h1>SSTF</h1>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <h1>About</h1>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>SSTF</div>
+                <div>
+                    <p>Shortest Seek Time First (SSTF) is a disk scheduling algorithm that selects the request closest
+                        to the current head position to minimize the seek time. It is an improvement over the First-Come,
+                        First-Served (FCFS) algorithm because it reduces the overall seek time by prioritizing nearby requests.
+                        In summary, SSTF is a good disk scheduling algorithm for reducing seek time but suffers from starvation issues.
+                    </p>
+                    <br>
+                    <div>Advantages</div>
+                    <p>
+                    <ol>
+                        <li>In SSTF disk scheduling, the average response time is decreased.</li><br>
+                        <li>Increased throughput.</li><br>
+                    </ol>
+                    </p>
+                    <div>Disadvantages</div>
+                    <p>
+                    <ol>
+                        <li>In SSTF, there may be a chance of starvation.</li><br>
+                        <li>SSTF is not an optimal algorithm.</li><br>
+                        <li>There are chances of overhead in SSTF disk scheduling because, in this algorithm, we have to
+                            calculate the seek time in advance.</li><br>
+                        <li>The speed of this algorithm can be decreased because direction could be switched frequently.</li><br>
+                    </ol>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <div>Algorithm</div>
+                <div>
+                    <p>
+                    <ol>
+                        <li>Let Request array represents an array storing indexes of tracks that have been requested.
+                            ‘head’ is the position of disk head.
+                        </li><br>
+                        <li>Find the positive distance of all tracks in the request array from head.</li><br>
+                        <li>Find a track from requested array which has not been accessed/serviced yet and has minimum
+                            distance from head.</li><br>
+                        <li>Increment the total seek count with this distance.</li><br>
+                        <li>Currently serviced track position now becomes the new head position.</li><br>
+                        <li>Go to step 2 until all tracks in request array have not been serviced.</li><br>
+                    </ol>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+        <div>
+            <div>
+                <h1>Implementation</h1>
+            </div>
+        </div>
+
+        <div></div>
+
+        <div>
+            <form>
+                <div>
+                    <div>
+                        <label>Number Of Requests</label>
+                        <input type="number">
+                    </div>
+
+                    <div>
+                        <label>Total Tracks</label>
+                        <input type="number" placeholder="Maximum track number">
+                    </div>
+
+                    <div>
+                        <label>Head Position</label>
+                        <input type="number">
+                    </div>
+
+                    <div>
+                        <label>Tracks</label>
+                        <input type="text" placeholder="Track requests">
+                    </div>
+
+                    <div>
+                        <input type="reset">
+                        <button type="button">Run</button>
+                    </div>
+
+                </div>
+            </form>
+
+            <div>
+                <div>
+                    <div>CHART WILL APPEAR HERE</div>
+                    <div>
+                        <div>
+                            <canvas></canvas>
+                        </div>
+
+                        <div>
+                            <div>
+                                <h4></h4>
+                                <h4></h4>
+                            </div>
+                            <div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <!-- footer -->
+    <div>
+        <div>
+            <footer>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <div>
+                                    <h4>OS Lab</h4>
+                                </div>
+                                <div>
+                                    <div>
+                                        <ul>
+                                            <li><a href="#">Home</a></li>
+                                            <li><a href="#">About Us</a></li>
+                                            <li><a href="#">Disk Scheduling</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <div>
+                                    <h4>Disk Scheduling</h4>
+                                </div>
+                                <div>
+                                    <div>
+                                        <ul>
+                                            <li><a href="#">FCFS</a></li>
+                                            <li><a href="#">SSTF</a></li>
+                                            <li><a href="#">SCAN</a></li>
+                                            <li><a href="#">C-SCAN</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+</body>
+
+</html>
