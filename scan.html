@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling</title>
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <a href="#">
+                <div>Disk Scheduling</div>
+            </a>
+            <button type="button">
+                <span></span>
+            </button>
+            <div>
+                <ul>
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Algorithm</a>
+                        <ul>
+                            <li><a href="#">Disk Scheduling</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Compare</a>
+                    </li>
+                    <li>
+                        <a href="#">About Developers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <div></div>
+        <div>
+            <h1>SCAN</h1>
+        </div>
+       
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <h1>About</h1>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>SCAN</div>
+                <div>
+                    <p> he SCAN disk scheduling algorithm is a method used by the operating system to manage disk
+                         read/write requests efficiently. It moves the disk head from one end of the disk to the 
+                         other, servicing requests along the way, then reverses direction and repeats the process. 
+                         
+                        <br><br>
+                        This movement pattern resembles an elevator, which is why SCAN is also called the "Elevator Algorithm."
+                    </p><br>
+                    <div>Advantages</div>
+                    <p>
+                    <ol>
+                        <li>Low variance of response time.</li><br>
+                        <li>High throughput.</li><br>
+                        <li>Average response time.</li><br>
+                        <li>No starvation.</li><br>
+                    </ol>
+                    </p>
+                    <div>Disadvantages</div>
+                    <p>
+                    <ol>
+                        <li>Long waiting time for recently visited cylinders.</li><br>
+                        <li>Head moves to the end of the disk even if no requests are there.</li><br>
+                    </ol>
+                    </p>
+                </div>
+            </div>
+            <div>
+                <div>Algorithm</div>
+                <div>
+                    <p>
+                    <ol>
+                        <li>Request array stores requested track indexes in ascending order.</li><br>
+                        <li>Direction represents head movement (left or right).</li><br>
+                        <li>Service all tracks in the current direction.</li><br>
+                        <li>Calculate absolute distance of the track from the head.</li><br>
+                        <li>Increment seek count.</li><br>
+                        <li>Set serviced track as the new head position.</li><br>
+                        <li>Repeat until reaching disk end.</li><br>
+                        <li>Reverse direction and repeat until all tracks are serviced.</li><br>
+                    </ol>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <h1>Implementation</h1>
+            </div>
+        </div>
+
+        <div></div>
+
+        <div>
+            <form>
+                <div>
+                    <div>
+                        <label>Number Of Requests</label>
+                        <input type="number">
+                    </div>
+
+                    <div>
+                        <label>Total Tracks</label>
+                        <input type="number" placeholder="Maximum track number">
+                    </div>
+
+                    <div>
+                        <label>Head Position</label>
+                        <input type="number">
+                    </div>
+
+                    <div>
+                        <label>Choose Direction</label>
+                        <select>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Tracks</label>
+                        <input type="text" placeholder="Track requests">
+                    </div>
+
+                    <div>
+                        <input type="reset">
+                        <button type="button">Run</button>
+                    </div>
+                </div>
+            </form>
+
+            <div>
+                <div>
+                    <div>
+                        CHART WILL APPEAR HERE
+                    </div>
+                    <div>
+                        <div>
+                            <canvas></canvas>
+                        </div>
+
+                        <div>
+                            <div>
+                                <h4></h4>
+                                <h4></h4>
+                            </div>
+                            <div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+
+    <div>
+        <div>
+            <footer>
+                <div>
+                    <div>
+                        <div>
+
+                            <div>
+                                <div>
+                                    <div>
+                                        <h4>OS Lab</h4>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <ul>
+                                                <li><a href="#">Home</a></li>
+                                                <li><a href="#">About Us</a></li>
+                                                <li><a href="#">Disk Scheduling</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <div>
+                                        <h4>Disc Scheduling</h4>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <ul>
+                                                <li><a href="#">FCFS</a></li>
+                                                <li><a href="#">SSTF</a></li>
+                                                <li><a href="#">SCAN</a></li>
+                                                <li><a href="#">C-SCAN</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </footer>
+        </div>
+    </div>
+
+</body>
+
+</html>
