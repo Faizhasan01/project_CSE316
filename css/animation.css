@@ -3661,6 +3661,23 @@
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
 }
+@keyframes zoomInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+}
 .animate__zoomInUp {
   -webkit-animation-name: zoomInUp;
   animation-name: zoomInUp;
@@ -4069,4 +4086,50 @@
 .animate__slideOutUp {
   -webkit-animation-name: slideOutUp;
   animation-name: slideOutUp;
+}
+
+/* Custom animation: slideRotate */
+@-webkit-keyframes slideRotate {
+  0% {
+    -webkit-transform: translateX(-100%) rotate(0deg);
+    transform: translateX(-100%) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    -webkit-transform: translateX(50%) rotate(180deg);
+    transform: translateX(50%) rotate(180deg);
+    opacity: 0.5;
+  }
+  100% {
+    -webkit-transform: translateX(0) rotate(360deg);
+    transform: translateX(0) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRotate {
+  0% {
+    -webkit-transform: translateX(-100%) rotate(0deg);
+    transform: translateX(-100%) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    -webkit-transform: translateX(50%) rotate(180deg);
+    transform: translateX(50%) rotate(180deg);
+    opacity: 0.5;
+  }
+  100% {
+    -webkit-transform: translateX(0) rotate(360deg);
+    transform: translateX(0) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.animate__slideRotate {
+  -webkit-animation-name: slideRotate;
+  animation-name: slideRotate;
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
 }
