@@ -4,6 +4,7 @@
 
 body {
     overflow-x: hidden;
+    
 }
 
 .block {
@@ -16,6 +17,13 @@ body {
     justify-content: center;
     align-items: center;
     border-bottom: 2px solid black;
+    background-image: url("./images/about_bg.jpg");
+    height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .block1 {
@@ -28,6 +36,13 @@ body {
     justify-content: center;
     align-items: center;
     border-bottom: 2px solid black;
+    background-image: url("./images/about_bg.jpg");
+    height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* NAVIGATION BAR */
