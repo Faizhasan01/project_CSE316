@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling</title>
+</head>
+
+<body>
+
+    <nav>
+        <div>
+            <a href="#">
+                <div>Disk Scheduling</div>
+            </a>
+            <button type="button">
+                <span></span>
+            </button>
+            <div>
+                <ul>
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Algorithm</a>
+                        <ul>
+                            <li><a href="#">Disk Scheduling</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Compare</a>
+                    </li>
+                    <li>
+                        <a href="#">About Developers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div>
+        <div></div>
+        <div>
+            <h1>DISK SCHEDULING</h1>
+        </div>
+        <div>
+            <h2>Includes:</h2>
+            <span></span>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <h1>About</h1>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>
+                    <p>A process needs two types of time, CPU time and IO time.</p>
+                    <p>For I/O, it requests the Operating system to access the disk.</p>
+                    <p>Disk scheduling is done by operating systems to schedule I/O requests arriving for the disk.</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>
+                    <p>Disk Scheduling is important because:</p>
+                    <p>1. Multiple I/O requests may arrive by different processes and only one I/O request can be served
+                        at a time by the disk controller. Thus other I/O requests need to wait in the waiting queue and
+                        need to be scheduled.</p>
+                    <p>2. Two or more requests may be far from each other so can result in greater disk arm movement.
+                    </p>
+                    <p>3. Hard drives need to be accessed in an efficient manner as they are the slowest parts of the
+                        computer system.</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>
+                    <p>Some of the important terms:</p>
+                    <p>Seek Time:</p>
+                    <p>Seek time is the time taken to locate the disk arm to a specified track where the data is to be
+                        read or write. So the disk scheduling algorithm that gives minimum average seek time is better.
+                    </p>
+                    <p>Rotational Latency:</p>
+                    <p>Rotational Latency is the time taken by the desired sector of disk to rotate into a position so
+                        that it can access the read/write heads. The disk scheduling algorithm that gives minimum
+                        rotational latency is better.</p>
+                    <p>Transfer Time:</p>
+                    <p>Transfer time is the time to transfer the data. It depends on the rotating speed of the disk and
+                        number of bytes to be transferred.</p>
+                    <p>Disk Access Time = Seek Time + Rotational Latency + Transfer time</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <h1>Algorithms</h1>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div>
+                    <a href="#">
+                        <div>
+                            <div>FCFS</div>
+                            <div>
+                                <p>Requests are served in the order that they arrive.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div>
+                    <h2>FCFS</h2>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <a href="#">
+                        <div>
+                            <div>SSTF</div>
+                            <div>
+                                <p>Request with lowest seek time is executed first.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div>
+                    <h2>SSTF</h2>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <a href="#">
+                        <div>
+                            <div>SCAN</div>
+                            <div>
+                                <p>All requests arriving in the path are addressed. Head moves till the end track.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div>
+                    <h2>SCAN</h2>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <a href="#">
+                        <div>
+                            <div>C-SCAN</div>
+                            <div>
+                                <p>Similar to that of SCAN. Requests are addressed when the head moves in a single
+                                    direction.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div>
+                    <h2>C-SCAN</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <footer>
+                <div>
+                    <div>
+                        <div>
+                            <div>
+                                <h4>Menu</h4>
+                                <div>
+                                    <ul>
+                                        <li><a href="#">Home</a></li>
+                                        <li><a href="#">About Us</a></li>
+                                        <li><a href="#">Disk Scheduling</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <h4>Disc Scheduling</h4>
+                                <div>
+                                    <ul>
+                                        <li><a href="#">FCFS</a></li>
+                                        <li><a href="#">SSTF</a></li>
+                                        <li><a href="#">SCAN</a></li>
+                                        <li><a href="#">C-SCAN</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>
+                            <a href="#" target="_blank"></a>
+                        </span>
+                        <span>|</span>
+                        <span>OS Project</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>
