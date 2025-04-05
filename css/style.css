@@ -1120,13 +1120,23 @@ box-shadow: 0 0 10px black;
 	align-items: center;
 }
 
-.footer-dark {
+/* .footer-dark {
 	padding: 0px 0px;
 	width: 100vw;
 	color: #f0f9ff;
 	background-color: #282d32;
-	padding-bottom: 20px;
-	padding-top: 10px;
+	padding-bottom: 40px;
+	padding-top: 5px;
+} */
+
+.footer-dark {
+	padding: 10px 0;
+	width: 100vw;
+	color: #f0f9ff;
+	background-color: #282d32;
+	margin-bottom: 0;
+	position: relative;
+	bottom: 0;
 }
 
 .footer-dark h4 {
