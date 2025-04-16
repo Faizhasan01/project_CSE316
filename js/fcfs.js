@@ -1,8 +1,3 @@
-// ADD SEEKOPERATIONSCALCULATIONS FUNTION
-// COPY ENTIRE DISPLAYSEEKOP AND DONE FUNCTIUONS
-// CHANGE THE THREE LINES OF CODE BEFORE THE DONE FUNCTION IN EACH JS FILE OF ALGORITHMS
-
-// ------------------------------------------------------------------------
 
 var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
@@ -176,7 +171,7 @@ function execute() {
         document.getElementById("chart-image").style.display = "none";
         document.getElementById("chart-container").style.display = "block";
 
-        // FOR PROGRESS BAR
+        // progress bar
         document.getElementById('seek').style.width = '100%';
         var progressWrapper = document.getElementById("seek");
         progressWrapper.innerHTML =
@@ -192,7 +187,7 @@ function execute() {
         var progressBar = document.getElementById("progressBar");
         var progressBarContainer = document.getElementById("progressBarContainer");
 
-        // FOR DOWNLOAD BUTTON
+        // download button
         function done() {
             let dbut = document.getElementById("download-buttons");
             dbut.style.display = 'flex';
@@ -231,7 +226,7 @@ function execute() {
                 doc.text("FCFS Algorithm", (doc.internal.pageSize.width / 2), 18, 'center');
                 doc.line(0, 30, doc.internal.pageSize.width, 30, 'S');
 
-                // GIVEN INFORMATION
+                // given info
                 doc.setFontSize(14);
                 doc.text('Given Information', 10, 40);
                 doc.setFontSize(12);
@@ -260,7 +255,7 @@ function execute() {
                 doc.setFont('times', 'bold', '100');
                 doc.text('Order in which tracks are serviced: ' + tReq, 20, 82);
 
-                // SEEK OPERATIONS
+                // seek operations
                 doc.setFontSize(14);
                 doc.text('Calculation of seek operations', 10, 97);
                 doc.setFontSize(12);
@@ -279,7 +274,7 @@ function execute() {
                 note = doc.splitTextToSize(note, 180);
                 doc.text(note, 20, 144);
 
-                // TRACK SERVICING CHART
+                // to track servicing chart
                 let factorw = imgw / doc.internal.pageSize.width;
                 let factorh = imgh / ((doc.internal.pageSize.height / 2) - 15);
 
@@ -296,12 +291,12 @@ function execute() {
                     doc.addImage(ImageURL, 'PNG', 7, 158, (imgw) - 10, (imgh));
                 }
 
-                // FINALLY SAVING THE PDF 
+                // to save the pdf 
                 doc.save('FCFS.pdf');
             });
         }
 
-        // THE CHART ITSELF
+        // chart
 
         algoChart = new Chart(ctx, {
             type: 'line',
@@ -468,7 +463,7 @@ function execute() {
             }, 700);
         }
 
-        // UPDATING THE CHART
+        // chart updation
         var start = {
             x: head,
             y: 0,
