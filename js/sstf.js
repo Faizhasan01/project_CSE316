@@ -58,7 +58,18 @@ function seekOperations(requestorder, headpos){
     return seektime;
 }
 
-
+function seekOperationsCalculations(requestorder, headpos){
+    var calc = '';
+    for(let i=0; i<requestorder.length; i++){
+        if(i===0){
+            calc += '|'+headpos+'-'+requestorder[i]+'|';
+        }
+        else{
+            calc += ' + '+'|'+requestorder[i-1]+'-'+requestorder[i]+'|';
+        }
+    }
+    return calc;
+}
 
 // FUNCTION EXECUTED ON RUN
 
@@ -97,7 +108,15 @@ function execute() {
         </div>`;
         allOk = false;
     }
-    
+    if (Number(maxTrack.value) <= 0 && allOk) {
+        str = 'Maximum number of tracks should be greater than 0!';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
     if (headPosition.value === '' && allOk) {
         str = 'The starting head position needs to be mentioned! It cannot be left blank.'
         document.getElementById("alert-wrapper").innerHTML = `
@@ -150,16 +169,16 @@ function execute() {
     if (allOk) {
         run.classList.toggle("disabled");
 
-        TO DISPLAY THE DOWNLOAD BUTTON ON WEBPAGE AFTER THE RUN BUTTON IS CLICKED
-        if(!fisrtTime){
-            var downloadButton = document.createElement("a");
-            downloadButton.id = "url"; downloadButton.download="SSTF.jpeg"; 
-            downloadButton.className="btn btn-dark last_button"; downloadButton.style.margin = "20px";
-            var text = document.createTextNode("Download");
-            downloadButton.append(text);
-            var controls = document.getElementById("controls"); controls.append(downloadButton);
-            fisrtTime = true;
-        }
+        //TO DISPLAY THE DOWNLOAD BUTTON ON WEBPAGE AFTER THE RUN BUTTON IS CLICKED
+        // if(!fisrtTime){
+        //     var downloadButton = document.createElement("a");
+        //     downloadButton.id = "url"; downloadButton.download="SSTF.jpeg"; 
+        //     downloadButton.className="btn btn-dark last_button"; downloadButton.style.margin = "20px";
+        //     var text = document.createTextNode("Download");
+        //     downloadButton.append(text);
+        //     var controls = document.getElementById("controls"); controls.append(downloadButton);
+        //     fisrtTime = true;
+        // }
 
         head = Number(headPosition.value);
         xrange = Number(maxTrack.value);
@@ -266,7 +285,22 @@ function execute() {
                 doc.text('Order in which tracks are serviced: '+ tReq, 20, 82);
 
                 // SEEK OPERATIONS
-                
+                doc.setFontSize(14);
+                doc.text('Calculation of seek operations', 10, 97);
+                doc.setFontSize(12);
+                doc.setFont("Times", "Roman");
+                var seekCalc = 'Total Seek Operations = '+seekOperationsCalculations(trackRequests, head);
+                var calc = doc.splitTextToSize(seekCalc, 180);
+                doc.text(calc,20,107);
+                doc.setFont("Times","bold");
+                doc.text('Thus, total seek time = ' + String(seekOperations(trackRequests, head))+'ms (Considering successive track seek time as 1ms)', 20, 121);
+                var seekTime = 'Average Seek Time = '+String(Math.round((xrange/3)*100)/100)+'ms (Time taken by the header to move across one third of total tracks)';
+                seekTime = doc.splitTextToSize(seekTime, 180);
+                doc.text(seekTime, 20, 131);
+
+                var note = 'If your disk takes "x" amount of time (in milliseconds) to seek across successive tracks, then multiply the above results by "x" to get the correct results';
+                note = doc.splitTextToSize(note, 180);
+                doc.text(note, 20, 144);
 
                 // TRACK SERVICING CHART
                 let factorw = imgw / doc.internal.pageSize.width;
@@ -285,14 +319,121 @@ function execute() {
                     doc.addImage(ImageURL, 'PNG', 7, 158, (imgw) - 10, (imgh));
                 }
                 
-                // to save the pdf
+                // saving pdf 
                 doc.save('SSTF.pdf');
             });
         }
 
 
-        
-        
+        // chart
+        algoChart.destroy();
+        algoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: xlabel,
+                datasets: [
+                    {
+                        label: "Showing",
+                        yAxisID: "first",
+                        xAxisID: "scale",
+                        fill: false,
+                        borderColor: 'black',
+                        pointBackgroundColor: 'rgba(168, 255, 120,1)',
+                        pointHoverBackgroundColor: 'red',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        lineTension: 0.2,
+                        data: []
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    fontFamily: 'Roboto Slab',
+                    fontSize: 30,
+                    fontColor: 'black',
+                    text: 'SSTF Graph'
+                },
+                hover:{
+                    mode: 'index',
+                    axis: 'x',
+                },
+                legend: {
+                    display: false,
+                },
+                tooltips: {
+                    callbacks: {
+
+                        title: function(tooltipItem, data){
+                            return 'SSTF';
+                        },
+                        label: function(tooltipItem, data) {
+                            return 'Properties';
+                        }, 
+                        afterLabel: function(tooltipItem, data) {
+                            let rnumber = 'Request: ' + tooltipItem.yLabel;
+                            let tnumber = 'Track: ' + data.datasets[tooltipItem.datasetIndex].data[Number(tooltipItem.yLabel)].x;
+                            return (
+                                [
+                                    rnumber,
+                                    tnumber
+                                ]
+                            );
+                        }
+                    }
+                },
+                animation: {
+                    easing: 'easeInQuad',
+                },
+                scales: {
+                    yAxes: [
+                        {
+                            scaleLabel: {
+                                display: true,
+                                fontFamily: 'Roboto Slab',
+                                fontSize: 12,
+                                fontStyle: 'bold',
+                                fontColor: 'black',
+                                labelString: 'REQUEST NUMBER'
+                            },
+                            id: 'first',
+                            position: 'top',
+                            ticks: {
+                                reverse: true,
+                                max: yrange+1,
+                                min: 0,
+                                stepSize: 1,
+                            },
+                        }
+                    ],
+                    xAxes: [
+                        {
+                            scaleLabel: {
+                                display: true,
+                                fontFamily: 'Roboto Slab',
+                                fontSize: 12,
+                                fontStyle: 'bold',
+                                fontColor: 'black',
+                                labelString: 'TRACK NUMBER'
+                            },
+                            id: 'scale',
+                            ticks: {
+                                max: xrange,
+                                min: 0,
+                                stepSize: 1,
+                            },
+                            display: true,
+                            position: 'top',
+                        }
+                    ]
+                }
+
+            }
+        });
         
         function displaySeekOp(){
             let temp = document.getElementById('temp');
