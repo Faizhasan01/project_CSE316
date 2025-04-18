@@ -72,7 +72,257 @@ function seekOperationsCalculations(requestorder, headpos){
 }
 
 // FUNCTION EXECUTED ON RUN
-    //to be completed
+
+function execute() {
+
+    document.getElementById("alert-wrapper").innerHTML = ``;
+    document.getElementById("chart-image").style.display = "flex";
+    document.getElementById("chart-container").style.display = "none";
+
+    let allOk = true;
+    var str = '';
+    if (requests.value === '') {
+        str = 'Number of requests cannot be left blank!';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+    if (Number(requests.value) <= 0 && allOk) {
+        str = 'The number of request should be greater than 0!';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+    if (maxTrack.value === '' && allOk) {
+        str = 'Maximum number of tracks cannot be left blank!';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+    if (Number(maxTrack.value) <= 0 && allOk) {
+        str = 'Maximum number of tracks should be greater than 0!';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+    if (headPosition.value === '' && allOk) {
+        str = 'The starting head position needs to be mentioned! It cannot be left blank.'
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+    if ((Number(headPosition.value) < 0 || Number(headPosition.value) > Number(maxTrack.value)) && allOk) {
+        str = 'The starting head position of must lie between 0 and maximum track number.';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+
+    trackRequests = [];
+    if ((tracks.value.split('')).indexOf(',') === -1) {
+        trackRequests = (tracks.value.split(' ')).map(Number);
+    }
+    else {
+        trackRequests = (tracks.value.split(',')).map(Number);
+    }
+    
+    trackRequests.forEach((x) => {
+        if (x < 0 || x > Number(maxTrack.value) && allOk) {
+            str = 'All the track requests must lie between 0 and maximum track number.';
+            document.getElementById("alert-wrapper").innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+                <strong>Warning!</strong> ${str}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+            allOk = false;
+        }
+    });
+
+    if(trackRequests.length != Number(requests.value) && allOk){
+        str = 'Please make sure that the number of track requests in the array match the total number of requests.';
+        document.getElementById("alert-wrapper").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin: 15px;">
+            <strong>Warning!</strong> ${str}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        allOk = false;
+    }
+
+    if (allOk) {
+        run.classList.toggle("disabled");
+
+        //TO DISPLAY THE DOWNLOAD BUTTON ON WEBPAGE AFTER THE RUN BUTTON IS CLICKED
+        // if(!fisrtTime){
+        //     var downloadButton = document.createElement("a");
+        //     downloadButton.id = "url"; downloadButton.download="SSTF.jpeg"; 
+        //     downloadButton.className="btn btn-dark last_button"; downloadButton.style.margin = "20px";
+        //     var text = document.createTextNode("Download");
+        //     downloadButton.append(text);
+        //     var controls = document.getElementById("controls"); controls.append(downloadButton);
+        //     fisrtTime = true;
+        // }
+
+        head = Number(headPosition.value);
+        xrange = Number(maxTrack.value);
+        
+        // CALLING THE REQUIRED FUNCTION FOR GETTING THE FINAL ARRAY
+        trackRequests = [...new Set(trackRequests)];
+        yrange = Number(trackRequests.length);
+        if(trackRequests.indexOf(head)!==-1){
+            trackRequests.splice(trackRequests.indexOf(head),1);
+            yrange--;
+        }
+        trackRequests = sstf(trackRequests, head, yrange);
+        yrange = Number(trackRequests.length);
+        
+        for (var i = 0; i <= xrange; i++) {
+            xlabel[i] = i;
+        }
+        for (i = 0; i <= yrange; i++) {
+            ylabel[i] = i;
+        }
+
+        // FOR HIDING THE IMAGE AND DISPLAYING THE IMAGE
+        document.getElementById("chart-image").style.display = "none";
+        document.getElementById("chart-container").style.display = "block";
+
+        // FOR PROGRESS BAR
+        document.getElementById('seek').style.width = '100%';
+        var progressWrapper = document.getElementById("seek");
+        progressWrapper.innerHTML = 
+            `<div id="progressBarContainer" class="progress animate__animated animate__backInUp">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>`;
+        
+        document.getElementById("dImageIcon").innerHTML = `<a id="url"></a>`;
+        document.getElementById("dPDFIcon").innerHTML = `<a id="genPDF"></a>`; 
+        document.getElementById("download-buttons").style.display = 'none';
+
+        // FOR DOWNLOAD BUTTON
+        function done() {
+            let dbut = document.getElementById("download-buttons");
+            dbut.style.display = 'flex';
+            dbut.style.flexDirection = 'row';
+            dbut.style.width = 'fit-content';
+            var ImageURL;
+            var url = algoChart.toBase64Image();
+            document.getElementById("url").href = url;
+
+            // CONVERTING BASE64 URL TO DATAURL FOR PDF
+            var imgw, imgh;
+            var imgurl = new Image();
+            imgurl.onload = function(){
+                imgw = imgurl.width;
+                imgh = imgurl.height;
+                var canvas = document.createElement("canvas");
+                canvas.width = imgw;
+                canvas.height = imgh;
+
+                var ctx2 = canvas.getContext("2d");
+                ctx2.fillStyle="#FFFFFF";
+                ctx2.fillRect(0, 0, canvas.width, canvas.height);
+                ctx2.drawImage(this, 0, 0, imgw, imgh);
+                ImageURL = canvas.toDataURL("image/png", 1);
+            }
+            imgurl.src = url;
+
+            // NEW CODE TO BE ADDED IN OTHER JS FILES 
+            var genPDF = document.getElementById("genPDF");
+            genPDF.addEventListener('click', () => {
+                var doc = new jsPDF('p', 'mm', 'a4');
+                doc.setFontSize(25);
+                doc.setFont('times', 'bold', '100');
+
+
+                doc.text("SSTF Algorithm", (doc.internal.pageSize.width/2), 18, 'center');
+                doc.line(0,30,doc.internal.pageSize.width,30,'S');
+
+                // GIVEN INFORMATION
+                doc.setFontSize(14);
+                doc.text('Given Information', 10, 40);
+                doc.setFontSize(12);
+                doc.setFont('times', 'normal', 'normal');
+                doc.text('Number of track requests: '+ requests.value, 20, 50);
+                doc.text('Total number of tracks: '+ maxTrack.value, 20, 58);
+                doc.text('Initial head position: '+ headPosition.value, 20, 66);
+                var tReq;
+                if ((tracks.value.split('')).indexOf(',') === -1) {
+                    tReq = (tracks.value.split(' ')).map(Number);
+                }
+                else {
+                    tReq = (tracks.value.split(',')).map(Number);
+                }
+
+                doc.text('Track requests: '+ tReq.join(', '), 20, 74);
+                tReq='';
+                for(let i=0; i<trackRequests.length; i++){
+                    if(i===0){
+                        tReq += String(trackRequests[i]);
+                    }
+                    else{
+                        tReq += ', '+String(trackRequests[i]);
+                    }
+                }
+                doc.setFont('Times', 'bold');
+                doc.text('Order in which tracks are serviced: '+ tReq, 20, 82);
+
+                // SEEK OPERATIONS
+                doc.setFontSize(14);
+                doc.text('Calculation of seek operations', 10, 97);
+                doc.setFontSize(12);
+                doc.setFont("Times", "Roman");
+                var seekCalc = 'Total Seek Operations = '+seekOperationsCalculations(trackRequests, head);
+                var calc = doc.splitTextToSize(seekCalc, 180);
+                doc.text(calc,20,107);
+                doc.setFont("Times","bold");
+                doc.text('Thus, total seek time = ' + String(seekOperations(trackRequests, head))+'ms (Considering successive track seek time as 1ms)', 20, 121);
+                var seekTime = 'Average Seek Time = '+String(Math.round((xrange/3)*100)/100)+'ms (Time taken by the header to move across one third of total tracks)';
+                seekTime = doc.splitTextToSize(seekTime, 180);
+                doc.text(seekTime, 20, 131);
+
+                var note = 'If your disk takes "x" amount of time (in milliseconds) to seek across successive tracks, then multiply the above results by "x" to get the correct results';
+                note = doc.splitTextToSize(note, 180);
+                doc.text(note, 20, 144);
+
+                // TRACK SERVICING CHART
+                let factorw = imgw / doc.internal.pageSize.width;
+                let factorh = imgh / ((doc.internal.pageSize.height / 2) - 15);
+
+                let xshift;
+                if (factorw > factorh && factorw > 1) {
+                    xshift = (doc.internal.pageSize.width - ((imgw / factorw) - 10)) / 2;
+                    doc.addImage(ImageURL, 'PNG', xshift, 158, (imgw / factorw) - 10, (imgh / factorw));
+                }
+                else if (factorh > factorw && factorh > 1) {
+                    xshift = (doc.internal.pageSize.width - ((imgw / factorh) - 10)) / 2;
+                    doc.addImage(ImageURL, 'PNG', xshift, 158, (imgw / factorh) - 10, (imgh / factorh));
+                }
+                else {
+                    doc.addImage(ImageURL, 'PNG', 7, 158, (imgw) - 10, (imgh));
+                }
+                
+                // saving pdf 
+                doc.save('SSTF.pdf');
+            });
+        }
 
 
         // chart
@@ -244,8 +494,46 @@ function seekOperationsCalculations(requestorder, headpos){
         }
 
 
-       
+        // UPDATING THE CHART
+        var start = {
+            x: head,
+            y: 0,
+        };
+        algoChart.data.datasets[0].data.push(start);
+        algoChart.update();
 
+        var a = 0;
+        var incrementValue = 100/yrange, counter=0;
+        var updatingData = setInterval(pushData, 700);
+        function pushData(){
+            if(a<yrange){
+                var obj = {
+                    x: trackRequests[a],
+                    y: a + 1
+                };
+                algoChart.data.datasets[0].data.push(obj);
+                algoChart.update();
+                a = a+1;
+
+                counter+=incrementValue;
+                progressBar.style.width = counter+"%"
+            }
+            else{
+                clearInterval(updatingData);
+                progressBarContainer.classList.toggle("animate__backOutDown");
+                setTimeout(function () {
+                    progressBarContainer.style.display = "none";
+                    progressWrapper.innerHTML = `<h4 id="temp"> </h4> <h4 id="temp1"> </h4>`;
+                    run.classList.toggle("disabled");
+                    displaySeekOp();
+                    done();
+                }, 1000
+                );
+            }
+        }
+    }
+}
+run.addEventListener("click", execute);
 
 window.addEventListener('wheel', (e) => {
     if (e.deltaY > 0) {
