@@ -216,3 +216,101 @@ function execute() {
         for (i = 0; i <= yrange; i++) {
             ylabel[i] = i;
         }
+
+        // FOR PROGRESS BAR
+        document.getElementById('seek').style.width = '100%';
+        var progressWrapper = document.getElementById("seek");
+        progressWrapper.innerHTML = 
+            `<div id="progressBarContainer" class="progress animate__animated animate__backInUp">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>`;
+    
+        document.getElementById("dImageIcon").innerHTML = `<a id="url"></a>`;
+        document.getElementById("dPDFIcon").innerHTML = `<a id="genPDF"></a>`; 
+        document.getElementById("download-buttons").style.display = 'none';
+
+        var progressBar = document.getElementById("progressBar");
+        var progressBarContainer = document.getElementById("progressBarContainer");
+
+        function displaySeekOp(){
+            let temp = document.getElementById('temp');
+            let temp1 = document.getElementById('temp1');
+            temp.remove(); temp1.remove();
+
+            let url = document.getElementById("url");
+            url.remove();
+
+            let genPDF = document.getElementById("genPDF");
+            genPDF.remove();
+
+            document.getElementById('seek').style.width = 'fit-content'; // to be added to other js files
+            // document.getElementById('seek').style.flexDirection = 'column';
+            var seekOp1 = document.createElement('h4');
+            seekOp1.id = 'temp';
+            seekOp1.style.fontWeight = "700"; seekOp1.style.margin = "5px";
+            str = 'Total Seek Time: ' + seekOperations(trackRequests, head) + ' ms';
+            seekOp1.append(document.createTextNode(str));
+            seekOp1.classList.add("animate__animated"); seekOp1.classList.add("animate__backInUp");
+            document.getElementById('seek').append(seekOp1);
+
+            var seekOp2 = document.createElement('h4');
+            seekOp2.id = 'temp1';
+            seekOp2.style.fontWeight = "700"; seekOp2.style.margin = "5px";
+            str = 'Average Seek Time: ' + Math.round((xrange/3)*100)/100 + ' ms';
+            seekOp2.append(document.createTextNode(str));
+            seekOp2.classList.add("animate__animated"); seekOp2.classList.add("animate__backInUp");
+            document.getElementById('seek').append(seekOp2);
+
+            setTimeout(() => {
+                window.scrollTo(0,document.body.scrollHeight);
+            }, 700);
+        }
+
+        var a = 0;
+        var incrementValue = 100/yrange, counter=0;
+        var updatingData = setInterval(pushData, 700);
+        function pushData(){
+            if(a<yrange){
+                a = a+1;
+
+                counter+=incrementValue;
+                progressBar.style.width = counter+"%"
+            }
+            else{
+                clearInterval(updatingData);
+                progressBarContainer.classList.toggle("animate__backOutDown");
+                setTimeout(function () {
+                    progressBarContainer.style.display = "none";
+                    progressWrapper.innerHTML = `<h4 id="temp"> </h4> <h4 id="temp1"> </h4>`;
+                    run.classList.toggle("disabled");
+                    displaySeekOp();
+                }, 1000
+                );
+            }
+        }
+    }
+}
+run.addEventListener("click", execute);
+
+window.addEventListener('wheel', (e) => {
+    if (e.deltaY > 0) {
+        document.getElementsByClassName('navbar')[0].classList.add('animate__slideOutUp');
+        setTimeout(() => {
+            document.getElementsByClassName('navbar')[0].style.display = 'none';
+
+            document.getElementsByClassName('navbar')[0].classList.remove('animate__slideOutUp');
+        }, 100);
+    }
+    else {
+        if (document.getElementsByClassName('navbar')[0].style.display === 'none') {
+            document.getElementsByClassName('navbar')[0].classList.add('animate__slideInDown');
+            setTimeout(() => {
+                document.getElementsByClassName('navbar')[0].style.display = 'block';
+            }, 50);
+            setTimeout(() => {
+                document.getElementsByClassName('navbar')[0].classList.remove('animate__slideInDown');
+            }, 500);
+        }
+
+    }
+});
