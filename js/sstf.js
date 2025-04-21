@@ -169,7 +169,7 @@ function execute() {
     if (allOk) {
         run.classList.toggle("disabled");
 
-        //TO DISPLAY THE DOWNLOAD BUTTON ON WEBPAGE AFTER THE RUN BUTTON IS CLICKED
+        // TO DISPLAY THE DOWNLOAD BUTTON ON WEBPAGE AFTER THE RUN BUTTON IS CLICKED
         // if(!fisrtTime){
         //     var downloadButton = document.createElement("a");
         //     downloadButton.id = "url"; downloadButton.download="SSTF.jpeg"; 
