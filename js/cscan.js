@@ -11,6 +11,8 @@ alertList.forEach(function (alert) {
 
 // GETTING ALL VARIABLES AND INPUTS
 
+document.getElementById("chart-image").classList.toggle("show-element");
+var ctx = document.getElementById("chart").getContext("2d");
 var requests = document.getElementById("requests");
 var maxTrack = document.getElementById("max-track");
 var headPosition = document.getElementById("head");
@@ -21,6 +23,7 @@ var dir = document.getElementById("direction");
 var yrange = 0, head = 0, xrange = 0;
 var xlabel = [], ylabel=[];
 var fisrtTime = true;
+var algoChart = new Chart(ctx, {});
 var trackRequests;
 
 //FUNCITON THAT RETURNS THE SCAN ARRAY
@@ -99,6 +102,8 @@ function seekOperationsCalculations(requestorder, headpos){
 function execute() {
 
     document.getElementById("alert-wrapper").innerHTML = ``;
+    document.getElementById("chart-image").style.display = "flex";
+    document.getElementById("chart-container").style.display = "none";
 
     let allOk = true;
     var str = '';
@@ -207,6 +212,277 @@ function execute() {
             ylabel[i] = i;
         }
 
+        // FOR HIDING THE IMAGE AND DISPLAYING THE IMAGE
+        document.getElementById("chart-image").style.display = "none";
+        document.getElementById("chart-container").style.display = "block";
+
+        // FOR PROGRESS BAR
+        document.getElementById('seek').style.width = '100%'; 
+        var progressWrapper = document.getElementById("seek");
+        progressWrapper.innerHTML = 
+            `<div id="progressBarContainer" class="progress animate__animated animate__backInUp">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>`;
+        
+        document.getElementById("dImageIcon").innerHTML = `<a id="url"></a>`;
+        document.getElementById("dPDFIcon").innerHTML = `<a id="genPDF"></a>`; 
+        document.getElementById("download-buttons").style.display = 'none';
+
+        var progressBar = document.getElementById("progressBar");
+        var progressBarContainer = document.getElementById("progressBarContainer");
+
+        // FOR DOWNLOAD BUTTON
+        function done() {
+            let dbut = document.getElementById("download-buttons");
+            dbut.style.display = 'flex';
+            dbut.style.flexDirection = 'row';
+            dbut.style.width = 'fit-content';
+            var ImageURL;
+            var url = algoChart.toBase64Image();
+            document.getElementById("url").href = url;
+
+            // CONVERTING BASE64 URL TO DATAURL FOR PDF
+            var imgw, imgh;
+            var imgurl = new Image();
+            imgurl.onload = function(){
+                imgw = imgurl.width;
+                imgh = imgurl.height;
+                var canvas = document.createElement("canvas");
+                canvas.width = imgw;
+                canvas.height = imgh;
+
+                var ctx2 = canvas.getContext("2d");
+                ctx2.fillStyle="#FFFFFF";
+                ctx2.fillRect(0, 0, canvas.width, canvas.height);
+                ctx2.drawImage(this, 0, 0, imgw, imgh);
+                ImageURL = canvas.toDataURL("image/png", 1);
+            }
+            imgurl.src = url;
+
+            // NEW CODE TO BE ADDED IN OTHER JS FILES 
+            var genPDF = document.getElementById("genPDF");
+            genPDF.addEventListener('click', () => {
+                var doc = new jsPDF('p', 'mm', 'a4');
+                doc.setFontSize(25);
+                doc.setFont('times', 'bold', '100');
+
+
+                doc.text("CSCAN Algorithm", (doc.internal.pageSize.width/2), 18, 'center');
+                doc.line(0,30,doc.internal.pageSize.width,30,'S');
+
+                // GIVEN INFORMATION
+                doc.setFontSize(14);
+                doc.text('Given Information', 10, 40);
+                doc.setFontSize(12);
+                doc.setFont('times', 'normal', 'normal');
+                doc.text('Number of track requests: '+ requests.value, 20, 50);
+                doc.text('Total number of tracks: '+ maxTrack.value, 20, 58);
+                doc.text('Initial head position: '+ headPosition.value, 20, 66);
+                var tReq;
+                if ((tracks.value.split('')).indexOf(',') === -1) {
+                    tReq = (tracks.value.split(' ')).map(Number);
+                }
+                else {
+                    tReq = (tracks.value.split(',')).map(Number);
+                }
+
+                doc.text('Track requests: '+ tReq.join(', '), 20, 74);
+                tReq='';
+                for(let i=0; i<trackRequests.length; i++){
+                    if(i===0){
+                        tReq += String(trackRequests[i]);
+                    }
+                    else{
+                        tReq += ', '+String(trackRequests[i]);
+                    }
+                }
+                doc.setFont('Times', 'bold');
+                doc.text('Order in which tracks are serviced: '+ tReq, 20, 82);
+
+                // SEEK OPERATIONS
+                doc.setFontSize(14);
+                doc.text('Calculation of seek operations', 10, 97);
+                doc.setFontSize(12);
+                doc.setFont("Times", "Roman");
+                var seekCalc = 'Total Seek Operations = '+seekOperationsCalculations(trackRequests, head);
+                var calc = doc.splitTextToSize(seekCalc, 180);
+                doc.text(calc,20,107);
+                doc.setFont("Times","bold");
+                doc.text('Thus, total seek time = ' + String(seekOperations(trackRequests, head))+'ms (Considering successive track seek time as 1ms)', 20, 121);
+                var seekTime = 'Average Seek Time = '+String(Math.round((xrange/3)*100)/100)+'ms (Time taken by the header to move across one third of total tracks)';
+                seekTime = doc.splitTextToSize(seekTime, 180);
+                doc.text(seekTime, 20, 131);
+
+                var note = 'If your disk takes "x" amount of time (in milliseconds) to seek across successive tracks, then multiply the above results by "x" to get the correct results';
+                note = doc.splitTextToSize(note, 180);
+                doc.text(note, 20, 144);
+
+                // TRACK SERVICING CHART
+                let factorw = imgw / doc.internal.pageSize.width;
+                let factorh = imgh / ((doc.internal.pageSize.height / 2) - 15);
+
+                let xshift;
+                if (factorw > factorh && factorw > 1) {
+                    xshift = (doc.internal.pageSize.width - ((imgw / factorw) - 10)) / 2;
+                    doc.addImage(ImageURL, 'PNG', xshift, 158, (imgw / factorw) - 10, (imgh / factorw));
+                }
+                else if (factorh > factorw && factorh > 1) {
+                    xshift = (doc.internal.pageSize.width - ((imgw / factorh) - 10)) / 2;
+                    doc.addImage(ImageURL, 'PNG', xshift, 158, (imgw / factorh) - 10, (imgh / factorh));
+                }
+                else {
+                    doc.addImage(ImageURL, 'PNG', 7, 158, (imgw) - 10, (imgh));
+                }
+                
+                // FINALLY SAVING THE PDF 
+                doc.save('CSCAN.pdf');
+            });
+        }
+
+        // THE CHART ITSELF
+        algoChart.destroy();
+        algoChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: xlabel,
+                datasets: [
+                    {
+                        label: "Showing",
+                        yAxisID: "first",
+                        xAxisID: "scale",
+                        fill: false,
+                        borderColor: 'black',
+                        pointBackgroundColor: 'rgba(168, 255, 120,1)',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 4,
+                        lineTension: 0.2,
+                        data: []
+                    },
+
+                    {
+                        label: "Showing",
+                        yAxisID: "first",
+                        xAxisID: "scale",
+                        fill: false,
+                        borderColor: 'black',
+                        borderDash: [10,15],
+                        pointBackgroundColor: 'rgba(168, 255, 120,1)',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 4,
+                        lineTension: 0.2,
+                        data: []
+                    },
+
+                    {
+                        label: "Showing",
+                        yAxisID: "first",
+                        xAxisID: "scale",
+                        fill: false,
+                        borderColor: 'black',
+                        pointBackgroundColor: 'rgba(168, 255, 120,1)',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 4,
+                        lineTension: 0.2,
+                        data: []
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    fontFamily: 'Roboto Slab',
+                    fontSize: 30,
+                    fontColor: 'black',
+                    text: 'C-SCAN Graph'
+                },
+                hover:{
+                    mode: 'index',
+                    axis: 'x',
+                },
+                legend: {
+                    display: false,
+                },
+                tooltips: {
+                    filter: function (tooltipItem) {
+                        return tooltipItem.datasetIndex === 0 || tooltipItem.datasetIndex === 2;
+                    }, 
+                    mode: 'nearest',
+                    axis: 'x',
+                    callbacks: {
+
+                        title: function(tooltipItem, data){
+                            return 'C-SCAN';
+                        },
+                        label: function(tooltipItem, data) {
+                            return 'Properties';
+                        }, 
+                        afterLabel: function(tooltipItem, data) {
+                            let rnumber = 'Request: ' + data.datasets[tooltipItem.datasetIndex].data[Number(tooltipItem.index)].y;
+                            console.log(tooltipItem.yLabel);
+                            let tnumber = 'Track: ' + data.datasets[tooltipItem.datasetIndex].data[Number(tooltipItem.index)].x;
+                            return (
+                                [
+                                    rnumber,
+                                    tnumber
+                                ]
+                            );
+                        }
+                    }
+                },
+                animation: {
+                    easing: 'easeInQuad',
+                },
+                scales: {
+                    yAxes: [
+                        {
+                            scaleLabel: {
+                                display: true,
+                                fontFamily: 'Roboto Slab',
+                                fontSize: 12,
+                                fontStyle: 'bold',
+                                fontColor: 'black',
+                                labelString: 'REQUEST NUMBER'
+                            },
+                            id: 'first',
+                            position: 'top',
+                            ticks: {
+                                reverse: true,
+                                max: yrange+1,
+                                min: 0,
+                                stepSize: 1,
+                            },
+                        }
+                    ],
+                    xAxes: [
+                        {
+                            scaleLabel: {
+                                display: true,
+                                fontFamily: 'Roboto Slab',
+                                fontSize: 12,
+                                fontStyle: 'bold',
+                                fontColor: 'black',
+                                labelString: 'TRACK NUMBER'
+                            },
+                            id: 'scale',
+                            ticks: {
+                                max: xrange,
+                                min: 0,
+                                stepSize: 1,
+                            },
+                            display: true,
+                            position: 'top',
+                        }
+                    ]
+                }
+
+            }
+        });
+        
         function displaySeekOp(){
             let temp = document.getElementById('temp');
             let temp1 = document.getElementById('temp1');
@@ -265,22 +541,90 @@ function execute() {
             }, 700);
         }
 
-        displaySeekOp();
-        run.classList.toggle("disabled");
+        // UPDATING THE CHART
+        var start = {
+            x: head,
+            y: 0,
+        };
+        algoChart.data.datasets[0].data.push(start);
+        algoChart.update();
+
+        var a = 0;
+        var firstover = false;
+        var incrementValue = 100/yrange, counter=0;
+        var updatingData = setInterval(pushData, 700);
+
+        function pushData(direction){
+
+            if(a<yrange){
+
+                var obj = {
+                    x: trackRequests[a],
+                    y: a + 1
+                };
+
+                if(firstover===false){
+                    if(obj.x===xrange || obj.x===0){
+                        algoChart.data.datasets[0].data.push(obj);
+                        algoChart.update();
+
+                        algoChart.data.datasets[1].data.push(obj);
+                        a+=1;
+
+                        counter+=incrementValue;
+                        progressBar.style.width = counter+"%";
+
+                        var obj_temp = {
+                            x: trackRequests[a],
+                            y: a + 1
+                        };
+                        algoChart.data.datasets[1].data.push(obj_temp);
+                        algoChart.update();
+
+                        algoChart.data.datasets[2].data.push(obj_temp);
+                        a+=1;
+
+                        firstover = true;
+                        algoChart.update();
+
+                        counter+=incrementValue;
+                        progressBar.style.width = counter+"%";
+                    }
+                    else{
+                        algoChart.data.datasets[0].data.push(obj);
+                        algoChart.update();
+                        a = a+1;
+
+                        counter+=incrementValue;
+                        progressBar.style.width = counter+"%";
+                    }
+                }
+                else{
+                    algoChart.data.datasets[2].data.push(obj);
+                    algoChart.update();
+                    a = a+1;
+
+                    counter+=incrementValue;
+                    progressBar.style.width = counter+"%";
+                }
+            }
+            else{
+                clearInterval(updatingData);
+                progressBarContainer.classList.toggle("animate__backOutDown");
+                setTimeout(function () {
+                    progressBarContainer.style.display = "none";
+                    progressWrapper.innerHTML = `<h4 id="temp"> </h4> <h4 id="temp1"> </h4>`;
+                    run.classList.toggle("disabled");
+                    displaySeekOp();
+                    done();
+                }, 1000
+                );
+            }
+        }
     }
 }
 run.addEventListener("click", execute);
 
-// window.addEventListener('wheel', (e) => {
-//     if(e.deltaY>0){
-//         if(window.pageYOffset>=50 && window.pageYOffset<652.6666870117188){
-//             window.scrollBy(0, 652.6666870117188 - window.pageYOffset);
-//         }
-//         if(window.pageYOffset>=778.6666870117188 && window.pageYOffset< 1256.6666259765625){
-//             window.scrollBy(0, 1256.6666259765625 - window.pageYOffset);
-//         }
-//     }
-// });
 
 
 window.addEventListener('wheel', (e) => {
