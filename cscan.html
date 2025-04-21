@@ -126,21 +126,29 @@
             <div class="card text-white bg-dark mb-3" style="max-width: 24rem;">
                 <div class="card-header" style="font-size: 2rem;">C SCAN</div>
                 <div class="card-body" style="overflow-y: scroll;">
-                    <p class="card-text">Circular SCAN (C-SCAN) scheduling algorithm is a modified version of SCAN disk
-                        scheduling algorithm that deals with the inefficiency of SCAN algorithm by servicing the
-                        requests more uniformly. <br><br>Like SCAN (Elevator Algorithm) C-SCAN moves the head from one
-                        end
-                        servicing all the requests to the other end. However, as soon as the head reaches the other end,
-                        it immediately returns to the beginning of the disk without servicing any requests on the return
-                        trip and starts servicing again once it reaches the beginning. </p>
+                    <p class="card-text">Circular SCAN (C-SCAN) is an improved version of the SCAN disk scheduling
+                        algorithm. It addresses the inefficiencies of the traditional SCAN algorithm by providing more
+                        uniform wait times for requests.
+                        <br><br>Similar to the SCAN (Elevator) algorithm, C-SCAN moves
+                        the disk arm from one end of the disk to the other, servicing requests along the way. However,
+                        once the head reaches the end, it quickly returns to the beginning without servicing any
+                        requests during the return trip. It then resumes servicing from the start, continuing in a
+                        circular motion.
+                    </p>
                     <div class="card-header bg-dark" style="font-size: 1.5rem; padding: 0; border: 0;">Advantages</div>
                     <p class="card-text">
                     <ol>
                         <li>
-                            C-SCAN offers better uniform waiting time.
+                            Provides uniform wait time across all requests.
                         </li><br>
                         <li>
-                            It offers a better response time.
+                            Avoids starvation of requests at the edges.
+                        </li><br>
+                        <li>
+                            More predictable performance than SCAN in heavy load conditions.
+                        </li><br>
+                        <li>
+                            Suitable for systems requiring fairness and consistency.
                         </li><br>
                     </ol>
                     </p>
@@ -149,8 +157,10 @@
                     <p class="card-text">
                     <ol>
                         <li>
-                            In C-SCAN disk scheduling, there are more seek movements as compared to SCAN disk
-                            scheduling.
+                            The return trip of the disk arm is wasted, as no requests are serviced during that time.
+                        </li><br>
+                        <li>
+                            Can be inefficient for light loads, where the benefit of uniformity is negligible.
                         </li><br>
                         <li>
                             In C-SCAN disk scheduling, we have to move the disk head to the end of the disk even when we
@@ -165,38 +175,45 @@
                 <div class="card-body" style="overflow-y: scroll;">
                     <p class="card-text">
                     <ol>
-                        <li>A request array contains the indexes of the tracks that have been requested in ascending
-                            order of time interval.
-                            The position of the read/ write head is 'HEAD'.
+                        <li>
+                            The request array contains the track numbers that have been requested, arranged in the order
+                            they arrive over time.
                         </li><br>
                         <li>
-                            The head services only in the right direction from 0 to size of the disk.
+                            The initial position of the read/write head is denoted as 'HEAD'.
                         </li><br>
                         <li>
-                            While moving in the left direction do not service any of the tracks.
+                            The head services requests only in the right direction, from track 0 to the maximum size of
+                            the disk.
                         </li><br>
                         <li>
-                            When you reach at the beginning (left end) reverse the direction.
+                            While moving in the left direction, the head does not service any tracks.
                         </li><br>
                         <li>
-                            While moving in right direction it services all tracks one by one.
+                            Once the head reaches the left end (track 0), it reverses direction and begins moving to the
+                            right again.
                         </li><br>
                         <li>
-                            While moving in right direction calculate the absolute distance of the track from the head.
+                            While moving to the right, the head services all track requests in order.
                         </li><br>
                         <li>
-                            Increment the total seek count with this distance.
+                            For each request, calculate the absolute distance between the current head position and the
+                            requested track.
                         </li><br>
                         <li>
-                            Currently serviced track position now becomes the new head position.
+                            Add this distance to the total seek count.
                         </li><br>
                         <li>
-                            Go to step 6 until we reach at right end of the disk.
+                            Update the head position to the currently serviced track.
                         </li><br>
                         <li>
-                            If you reach at the right end of the disk reverse the direction and go to step 3 until all
-                            tracks in request array have not been serviced.
+                            Repeat steps 6–9 until the head reaches the right end of the disk.
                         </li><br>
+                        <li>
+                            Once the right end is reached, the head returns to the left end without servicing any
+                            requests, and steps 3–10 continue until all tracks in the request array have been serviced.
+                        </li><br>
+
                     </ol>
                     </p>
                 </div>
