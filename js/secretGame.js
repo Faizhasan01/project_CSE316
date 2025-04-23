@@ -19,7 +19,7 @@ const secretLink = document.getElementById("secretLink");
 
 nameElement.addEventListener("click", () => {
   nameClicks++;
-  if (nameClicks >= 5) {
+  if (nameClicks >= 2) {
     secretLink.style.display = "inline";
     alert("You found the hidden game!");
     window.open(secretLink.href, "_blank");
