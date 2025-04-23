@@ -1,7 +1,4 @@
 # project_CSE316
-Perfect! Here's a revised version of the **README section** tailored specifically for your project that includes **only FCFS, SSTF, SCAN, and C-SCAN**, and skips LOOK and C-LOOK:
-
----
 
 ## 🚀 Disk Scheduling Simulator
 
