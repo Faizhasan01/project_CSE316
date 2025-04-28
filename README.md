@@ -1,6 +1,6 @@
 # project_CSE316
 - DEMO: https://faizhasan01.github.io/project_CSE316/
-============================
+
 ## 🚀 Disk Scheduling Simulator
 
 The **Disk Scheduling Simulator** is a web-based educational tool that helps visualize and understand how various disk scheduling algorithms work. It allows users to simulate the movement of the disk head and calculate performance metrics like **Total Seek Time** and **Average Seek Time**.
